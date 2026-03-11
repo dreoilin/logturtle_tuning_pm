@@ -1,0 +1,47 @@
+LTspice 26.0.0 for Windows
+Circuit: C:\Users\ciano\OneDrive - University College Cork\LogTurtle\Test PCBs\APR2025\LOGTURTLE_APR_25_TX\Modelling\LTSpice\Example EPC2619.net
+Start Time: Thu Jan 29 14:07:21 2026
+Options:noopiter
+solver = Normal
+Maximum thread count: 8
+tnom = 27
+temp = 27
+method = trap
+noOpIter = true
+Direct Newton iteration for .op point skipped.
+Starting Gmin stepping
+Gmin stepping succeeded in finding the operating point.
+
+Total elapsed time: 6.793 seconds.
+
+Files loaded:
+C:\Users\ciano\OneDrive - University College Cork\LogTurtle\Test PCBs\APR2025\LOGTURTLE_APR_25_TX\Modelling\LTSpice\Example EPC2619.net
+C:\Users\ciano\OneDrive - University College Cork\LogTurtle\Test PCBs\APR2025\LOGTURTLE_APR_25_TX\Modelling\LTSpice\EPCGanlibrary.lib
+
+phs: AVG(V(VG_HS,U1_S)*I(R1g)+V(Vdc,U1_S)*I(R1d))=1.56264574487 FROM 0 TO 2e-05
+pls: AVG(V(VG_LS,U2_S)*I(R2g)+V(Vsw,U2_S)*I(R2d))=1.01968175164 FROM 0 TO 2e-05
+pgd_hs: AVG(-V(IN_HS,Vsw)*I(V15))=0.0210462039874 FROM 0 TO 2e-05
+pgd_ls: AVG(-V(IN_LS)*I(V25))=0.0192661321321 FROM 0 TO 2e-05
+ptot: Phs+Pgd_hs+Pls+Pgd_ls=2.62263983263
+pin: AVG(-V(Vdc)*I(V1))=192.712514378 FROM 0 TO 2e-05
+pout: AVG(V(Vout)*I(RLoad))=189.516076387 FROM 0 TO 2e-05
+ploss: Pin-Pout=3.19643799043
+eff: Pout/Pin=0.983413438402
+trg1: V(VHS)=2.5  AT 1.60005e-05
+tr1: V(Vsw)={Vin*0.15}  AT 1.60030467308e-05
+tr2: V(Vsw)={Vin*0.85}  AT 1.60040953515e-05
+ion: I(R1d) =26.3462584604 at 1.60040953515e-05
+ti1: I(R1d)=Ion/20  AT 1.60017931349e-05
+trise_ns: (tr2-tr1)*1e9=1.04862068572
+tf1: V(Vsw)={Vin*0.85}  AT 1.6504830433e-05
+tf2: V(Vsw)={Vin*0.15}  AT 1.6506592654e-05
+ti2: I(R1d)=Ion/20  AT 1.65074930944e-05
+tfall_ns: (tf2-tf1)*1e9=1.76222099193
+dvdton: Vin*0.7/trise_ns=32.0420915375
+dvdtoff: Vin*0.7/tfall_ns=19.0668481161
+eon: INTEG(V(Vdc,U1_S)*I(R1d)*1e6 )=1.6125562035 FROM 1.60007445142e-05 TO 1.60061925928e-05
+eoff: INTEG(V(Vdc,U1_S)*I(R1d)*1e6 )=0.667768596491 FROM 1.6503068212e-05 TO 1.65110175363e-05
+pon: (Eon/1e6*{freq})=0.806278101752
+poff: (Eoff/1e6*{freq})=0.333884298246
+pchs: (Phs-Pon-Poff)=0.422483344875
+pldcr: AVG(V(Vsw1,Vsw)*I(R1))=0.185329131245 FROM 0 TO 2e-05

@@ -1,0 +1,4 @@
+T_DRIVE = 1e-6;
+T_CPU = (1/200)*1e-6;
+N_CYCLES_DRIVE = T_DRIVE / T_CPU;
+NBITS = 8;
