@@ -31,7 +31,7 @@ int MEP_ScaleFactor; // Global variable used by the SFO library
 //volatile uint32_t ePWM[] =
 //    {0, myEPWM1_BASE, myEPWM2_BASE, myEPWM3_BASE, myEPWM4_BASE};
 volatile uint32_t ePWM[] =
-    {0, myEPWM1_BASE};
+    {0, myEPWM1_BASE, myEPWM2_BASE, myEPWM3_BASE};
 
 // CPU -> CLA command mailbox (CPU writes, CLA reads)
 #pragma DATA_SECTION(cla_cmd_direction, "CpuToCla1MsgRAM")
@@ -59,8 +59,9 @@ volatile uint16_t cla_cmd_ack_seq = 0U;
 #pragma DATA_SECTION(cla_done_count, "Cla1ToCpuMsgRAM")
 volatile uint32_t cla_done_count = 0U;
 
-#pragma DATA_SECTION(cla_task1_hits, "Cla1ToCpuMsgRAM")
-volatile uint32_t cla_task1_hits = 0U;
+// debug variable
+//#pragma DATA_SECTION(cla_task1_hits, "Cla1ToCpuMsgRAM")
+//volatile uint32_t cla_task1_hits = 0U;
 
 #pragma DATA_SECTION(cla_period_hr_normal_q8, "CpuToCla1MsgRAM")
 volatile uint32_t cla_period_hr_normal_q8 = 0U;
@@ -79,16 +80,29 @@ volatile uint32_t cla_cmpa_hr_slow_q8 = 0U;
 
 #pragma DATA_SECTION(cla_cmpa_hr_fast_q8, "CpuToCla1MsgRAM")
 volatile uint32_t cla_cmpa_hr_fast_q8 = 0U;
+// meesage ram for ePWM2/3 periods. CPU always initialises, CLA only reads
+#pragma DATA_SECTION(cla_aux_period_hr_normal_q8, "CpuToCla1MsgRAM")
+volatile uint32_t cla_aux_period_hr_normal_q8 = 0U;
 
-#pragma DATA_SECTION(xint1_hits, "Cla1ToCpuMsgRAM")
-volatile uint32_t xint1_hits = 0U;
+#pragma DATA_SECTION(cla_aux_period_hr_fast_q8, "CpuToCla1MsgRAM")
+volatile uint32_t cla_aux_period_hr_fast_q8 = 0U;
 
-#pragma DATA_SECTION(xint2_hits, "Cla1ToCpuMsgRAM")
-volatile uint32_t xint2_hits = 0U;
-//
+#pragma DATA_SECTION(cla_aux_period_hr_slow_q8, "CpuToCla1MsgRAM")
+volatile uint32_t cla_aux_period_hr_slow_q8 = 0U;
+// meesage ram for ePWM2/3 duty cycles. CPU always initialises, CLA only reads
+#pragma DATA_SECTION(cla_aux_cmpa_hr_normal_q8, "CpuToCla1MsgRAM")
+volatile uint32_t cla_aux_cmpa_hr_normal_q8 = 0U;
+
+#pragma DATA_SECTION(cla_aux_cmpa_hr_fast_q8, "CpuToCla1MsgRAM")
+volatile uint32_t cla_aux_cmpa_hr_fast_q8 = 0U;
+
+#pragma DATA_SECTION(cla_aux_cmpa_hr_slow_q8, "CpuToCla1MsgRAM")
+volatile uint32_t cla_aux_cmpa_hr_slow_q8 = 0U;
+
 // Function Prototypes
-//
 void initHRPWM1(uint32_t base, uint32_t period);
+void initAuxiliaryHRPWM(uint32_t base, uint32_t period);
+void setAuxiliaryHRPWMDutyCycle(uint32_t base, uint32_t period, uint16_t dutyPercent);
 void error(void);
 
 static void precomputePhaseShiftPeriodsForCLA(void);
@@ -166,10 +180,16 @@ void main(void)
     SysCtl_disablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
     SysCtl_setEPWMClockDivider(SYSCTL_EPWMCLK_DIV_1);
 
-    initHRPWM1(ePWM[1], EPWM_TIMER_TBPRD);
+    initHRPWM1(myEPWM1_BASE, EPWM_TIMER_TBPRD);
+    initAuxiliaryHRPWM(myEPWM2_BASE, EPWM_TIMER_TBPRD);
+    initAuxiliaryHRPWM(myEPWM3_BASE, EPWM_TIMER_TBPRD);
 
     // Enable sync and clock to PWM
     SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
+
+    // Set initial duty cycles for auxiliary PWMs
+    setAuxiliaryHRPWMDutyCycle(myEPWM2_BASE, EPWM_TIMER_TBPRD, 20);   // ePWM2A: 10%
+    setAuxiliaryHRPWMDutyCycle(myEPWM3_BASE, EPWM_TIMER_TBPRD, 80);   // ePWM3A: 90%
 
     // Arm external lead/lag commands only after PWM is fully configured.
     configureLagLeadHardwareTriggers();
@@ -241,7 +261,7 @@ void initHRPWM1(uint32_t base, uint32_t period)
     EPWM_setClockPrescaler(base,
                             EPWM_CLOCK_DIVIDER_1,
                             EPWM_HSCLOCK_DIVIDER_1);
-    //EPWM_disablePhaseShiftLoad(base);
+    EPWM_disablePhaseShiftLoad(base);
 
     // Sync-out generation from this channel:
     // Generates EPWMxSYNCO pulse at TBCTR = ZERO once per PWM cycle.
@@ -301,6 +321,96 @@ void initHRPWM1(uint32_t base, uint32_t period)
     EPWM_enableInterrupt(base);
 }
 
+void initAuxiliaryHRPWM(uint32_t base, uint32_t period)
+{   
+    // base frequency needs to have integer count of CPU cycles + divisible by 4
+    // want electrical period to be 1/2 of main period. Up down count so div 4
+    uint32_t auxPeriod = period >> 2U;
+
+    EPWM_setEmulationMode(base, EPWM_EMULATION_FREE_RUN);
+    // Time base
+    EPWM_setTimeBasePeriod(base, (uint16_t)auxPeriod);
+    // set HRPWM register
+    HRPWM_setTimeBasePeriod(base, auxPeriod << 8U);
+    EPWM_setTimeBaseCounter(base, 0U);
+    EPWM_setTimeBaseCounterMode(base, EPWM_COUNTER_MODE_UP_DOWN);
+    EPWM_setClockPrescaler(base, EPWM_CLOCK_DIVIDER_1, EPWM_HSCLOCK_DIVIDER_1);
+
+    // Sync to ePWM1: load TBPHS on incoming sync, no phase offset
+    // Use HRPWM phase shift to clear both TBPHS and TBPHSHR
+    HRPWM_setPhaseShift(base, 0U); 
+    EPWM_enablePhaseShiftLoad(base);
+    EPWM_setCountModeAfterSync(base, EPWM_COUNT_MODE_UP_AFTER_SYNC);
+    EPWM_enablePhaseShiftLoad(base);
+    EPWM_setCountModeAfterSync(base, EPWM_COUNT_MODE_UP_AFTER_SYNC);
+
+    // Keep slaves forwarding sync
+    EPWM_setSyncOutPulseMode(base, EPWM_SYNC_OUT_PULSE_ON_EPWMxSYNCIN);
+
+    // 50% duty initially, consolidated CMPA:CMPAHR
+    // may need to adjust this during testing
+    // !TODO simulate this
+    uint32_t cmpaQ8 = (auxPeriod << 8U) >> 1U;
+    HRPWM_setCounterCompareValue(base, HRPWM_COUNTER_COMPARE_A, cmpaQ8);
+    HRPWM_setChannelBOutputPath(base, HRPWM_OUTPUT_ON_B_NORMAL);
+
+    // Shadowing for up-down
+    EPWM_setCounterCompareShadowLoadMode(base,
+                                         EPWM_COUNTER_COMPARE_A,
+                                         EPWM_COMP_LOAD_ON_CNTR_ZERO_PERIOD);
+    HRPWM_setCounterCompareShadowLoadEvent(base,
+                                           HRPWM_CHANNEL_A,
+                                           HRPWM_LOAD_ON_CNTR_ZERO_PERIOD);
+    
+    // Set Action Qualifier for Channel A (Up-Down Count Mode)
+    // Go HIGH when counter hits CMPA on the way UP
+    EPWM_setActionQualifierAction(base, EPWM_AQ_OUTPUT_A, EPWM_AQ_OUTPUT_HIGH, 
+                                  EPWM_AQ_OUTPUT_ON_TIMEBASE_UP_CMPA);
+                                  
+    // Go LOW when counter hits CMPA on the way DOWN
+    EPWM_setActionQualifierAction(base, EPWM_AQ_OUTPUT_A, EPWM_AQ_OUTPUT_LOW, 
+                                  EPWM_AQ_OUTPUT_ON_TIMEBASE_DOWN_CMPA);
+
+    // Keep B AQ neutral so deadband module owns B waveform generation
+    EPWM_setActionQualifierAction(base, EPWM_AQ_OUTPUT_B, EPWM_AQ_OUTPUT_NO_CHANGE,
+                                  EPWM_AQ_OUTPUT_ON_TIMEBASE_ZERO);
+    EPWM_setActionQualifierAction(base, EPWM_AQ_OUTPUT_B, EPWM_AQ_OUTPUT_NO_CHANGE,
+                                  EPWM_AQ_OUTPUT_ON_TIMEBASE_UP_CMPB);
+    
+    // HR duty + HR period
+    HRPWM_setMEPEdgeSelect(base, HRPWM_CHANNEL_A, HRPWM_MEP_CTRL_RISING_AND_FALLING_EDGE);
+    HRPWM_setMEPControlMode(base, HRPWM_CHANNEL_A, HRPWM_MEP_DUTY_PERIOD_CTRL);
+    HRPWM_enableAutoConversion(base);
+    HRPWM_enablePeriodControl(base);
+    
+    // Deadband + HR deadband
+    HRPWM_setDeadBandDelayMode(base, EPWM_DB_RED, true);
+    HRPWM_setDeadBandDelayMode(base, EPWM_DB_FED, true);
+    HRPWM_setRisingEdgeDeadBandDelayInput(base, EPWM_DB_INPUT_EPWMA);
+    HRPWM_setFallingEdgeDeadBandDelayInput(base, EPWM_DB_INPUT_EPWMA);
+    HRPWM_setDeadBandDelayPolarity(base, EPWM_DB_RED, EPWM_DB_POLARITY_ACTIVE_HIGH);
+    HRPWM_setDeadBandDelayPolarity(base, EPWM_DB_FED, EPWM_DB_POLARITY_ACTIVE_LOW);
+    EPWM_setDeadBandCounterClock(base, EPWM_DB_COUNTER_CLOCK_FULL_CYCLE);
+
+    HRPWM_setDeadbandMEPEdgeSelect(base, HRPWM_DB_MEP_CTRL_RED_FED);
+    HRPWM_setRisingEdgeDelayLoadMode(base, HRPWM_LOAD_ON_CNTR_ZERO_PERIOD);
+    HRPWM_setFallingEdgeDelayLoadMode(base, HRPWM_LOAD_ON_CNTR_ZERO_PERIOD);
+    HRPWM_setRisingEdgeDelay(base, DB_RED_HR_COUNT);
+    HRPWM_setFallingEdgeDelay(base, DB_FED_HR_COUNT);
+}
+
+void setAuxiliaryHRPWMDutyCycle(uint32_t base, uint32_t period, uint16_t dutyPercent)
+{
+    // auxPeriod calculation matches initAuxiliaryHRPWM
+    uint32_t auxPeriod = period >> 2U;
+    
+    // Convert duty cycle percentage to Q8 consolidated CMPA:CMPAHR format
+    // dutyPercent ranges from 0 to 100 (representing 0% to 100% duty)
+    uint32_t cmpaQ8 = ((auxPeriod << 8U) * (100U - dutyPercent )) / 100U;
+    
+    HRPWM_setCounterCompareValue(base, HRPWM_COUNTER_COMPARE_A, cmpaQ8);
+}
+
 static void precomputePhaseShiftPeriodsForCLA(void)
 {
     // Keep this consistent with your current TBPRD usage.
@@ -321,6 +431,16 @@ static void precomputePhaseShiftPeriodsForCLA(void)
     cla_cmpa_hr_normal_q8 = cla_period_hr_normal_q8 >> 1U;
     cla_cmpa_hr_slow_q8   = cla_period_hr_slow_q8 >> 1U;
     cla_cmpa_hr_fast_q8   = cla_period_hr_fast_q8 >> 1U;
+
+    // Auxiliary ePWM2/3 periods: 1/4 of ePWM1 periods (up-down count mode)
+    cla_aux_period_hr_normal_q8 = cla_period_hr_normal_q8 >> 2U;
+    cla_aux_period_hr_slow_q8   = cla_period_hr_slow_q8   >> 2U;
+    cla_aux_period_hr_fast_q8   = cla_period_hr_fast_q8   >> 2U;
+
+    // 50% duty for aux during phase shift (up-down mode)
+    cla_aux_cmpa_hr_normal_q8 = cla_aux_period_hr_normal_q8 >> 1U;
+    cla_aux_cmpa_hr_slow_q8   = cla_aux_period_hr_slow_q8   >> 1U;
+    cla_aux_cmpa_hr_fast_q8   = cla_aux_period_hr_fast_q8   >> 1U;
 }
 
 static void configureLagLeadHardwareTriggers(void)
@@ -349,33 +469,27 @@ static void configureLagLeadHardwareTriggers(void)
 
 __interrupt void xintLeadIsr(void)
 {
-    xint1_hits++;
     if(cla_state_active == 0U)
     {
         cla_cmd_direction = PHASE_LEAD;
         cla_cmd_cycles    = N_PHASE_CYCLES;
         cla_cmd_seq++;
     }
-
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP1);
 }
 
 __interrupt void xintLagIsr(void)
 {
-    xint2_hits++;
     if(cla_state_active == 0U)
     {
         cla_cmd_direction = PHASE_LAG;
         cla_cmd_cycles    = N_PHASE_CYCLES;
         cla_cmd_seq++;
     }
-
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP1);
 }
 
-//
 // error - Halt debugger when called
-//
 void error (void)
 {
     ESTOP0;         // Stop here and handle error

@@ -8,6 +8,8 @@ interrupt void Cla1Task1(void)
 {
     uint32_t prd_q8;
     uint32_t cmp_q8;
+    uint32_t aux_prd_q8;
+    uint32_t aux_cmp_q8;
 
     // Latch a new CPU command when idle
     if((cla_state_active == 0U) && (cla_cmd_seq != cla_cmd_ack_seq))
@@ -25,32 +27,47 @@ interrupt void Cla1Task1(void)
         return;
     }
 
-    cla_task1_hits++;
+    //cla_task1_hits++;
 
     // Active shift window: apply fast/slow for exactly N cycles
     if(cla_state_cycles_remaining > 0U)
     {
         if(cla_state_direction == PHASE_LEAD)
         {
-            prd_q8 = cla_period_hr_fast_q8;
+            prd_q8 = cla_period_hr_fast_q8-1;
             cmp_q8 = cla_cmpa_hr_fast_q8;
+            aux_prd_q8 = cla_aux_period_hr_fast_q8;
+            aux_cmp_q8 = cla_aux_cmpa_hr_fast_q8;
         }
         else
         {
-            prd_q8 = cla_period_hr_slow_q8;
+            prd_q8 = cla_period_hr_slow_q8-1;
             cmp_q8 = cla_cmpa_hr_slow_q8;
+            aux_prd_q8 = cla_aux_period_hr_slow_q8;
+            aux_cmp_q8 = cla_aux_cmpa_hr_slow_q8;
         }
 
         HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (prd_q8 << 8U);
         HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = (cmp_q8 << 8U);
+
+        // ePWM2/3 (up-down count)
+        HWREG(EPWM2_BASE + HRPWM_O_TBPRDHR) = (aux_prd_q8 << 8U);
+        HWREG(EPWM2_BASE + HRPWM_O_CMPA)    = (aux_cmp_q8 << 8U);
+        HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (aux_prd_q8 << 8U);
+        HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (aux_cmp_q8 << 8U);
 
         cla_state_cycles_remaining--;
     }
     else
     {
         // Restore nominal after N shifted cycles
-        HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (cla_period_hr_normal_q8 << 8U);
-        HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = (cla_cmpa_hr_normal_q8 << 8U);
+        HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (cla_period_hr_normal_q8-1 << 8U);
+        HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = (cla_cmpa_hr_normal_q8-1 << 8U);
+
+        HWREG(EPWM2_BASE + HRPWM_O_TBPRDHR) = (cla_aux_period_hr_normal_q8 << 8U);
+        HWREG(EPWM2_BASE + HRPWM_O_CMPA)    = (cla_aux_cmpa_hr_normal_q8 << 8U);
+        HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (cla_aux_period_hr_normal_q8 << 8U);
+        HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (cla_aux_cmpa_hr_normal_q8 << 8U);
 
         cla_state_direction = PHASE_NONE;
         cla_state_active    = 0U;

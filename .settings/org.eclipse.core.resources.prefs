@@ -1,4 +1,16 @@
 eclipse.preferences.version=1
+encoding//CPU1_RAM/Modelling/LTSpice/subdir_rules.mk=UTF-8
+encoding//CPU1_RAM/Modelling/LTSpice/subdir_vars.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/F28379D/F2837x_TUNING_ert_rtw/subdir_rules.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/F28379D/F2837x_TUNING_ert_rtw/subdir_vars.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/F2837x_TUNING_ert_rtw/subdir_rules.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/F2837x_TUNING_ert_rtw/subdir_vars.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/TestBlink_ert_rtw/subdir_rules.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/TestBlink_ert_rtw/subdir_vars.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/slprj/raccel/TX_PM_MODEL/subdir_rules.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/slprj/raccel/TX_PM_MODEL/subdir_vars.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/subdir_rules.mk=UTF-8
+encoding//CPU1_RAM/Modelling/Simulink/subdir_vars.mk=UTF-8
 encoding//CPU1_RAM/device/subdir_rules.mk=UTF-8
 encoding//CPU1_RAM/device/subdir_vars.mk=UTF-8
 encoding//CPU1_RAM/makefile=UTF-8

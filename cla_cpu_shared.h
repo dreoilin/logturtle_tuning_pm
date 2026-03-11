@@ -8,10 +8,6 @@
 typedef float float32_t;
 #endif
 
-// Use 'extern' because these will be physically defined in main.c
-extern volatile uint32_t pulseCounter;
-extern volatile float32_t dutyCoeff;
-
 // Phase command values
 #define PHASE_NONE 0U
 #define PHASE_LAG  1U
@@ -33,13 +29,20 @@ extern volatile uint16_t cla_state_active;
 extern volatile uint16_t cla_cmd_ack_seq;
 extern volatile uint32_t cla_done_count;
 
-extern volatile uint32_t cla_task1_hits;
-
+// CLA-owned cmpa and periods for ePWM1 (Q8 consolidated format)
 extern volatile uint32_t cla_period_hr_normal_q8;
 extern volatile uint32_t cla_period_hr_slow_q8;
 extern volatile uint32_t cla_period_hr_fast_q8;
 extern volatile uint32_t cla_cmpa_hr_normal_q8;
 extern volatile uint32_t cla_cmpa_hr_slow_q8;
 extern volatile uint32_t cla_cmpa_hr_fast_q8;
+
+// CLA-owned cmpa and periods for ePWM2/3 (Q8 consolidated format)
+extern volatile uint32_t cla_aux_period_hr_normal_q8;
+extern volatile uint32_t cla_aux_period_hr_fast_q8;
+extern volatile uint32_t cla_aux_period_hr_slow_q8;
+extern volatile uint32_t cla_aux_cmpa_hr_normal_q8;
+extern volatile uint32_t cla_aux_cmpa_hr_fast_q8;
+extern volatile uint32_t cla_aux_cmpa_hr_slow_q8;
 
 #endif
