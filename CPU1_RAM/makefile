@@ -12,9 +12,11 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./F2837xD_GlobalVariableDefs.obj" \
 "./cla_tasks.obj" \
+"./hrpwm_control.obj" \
 "./syscfg/board.obj" \
 "./syscfg/c2000ware_libraries.obj" \
 "./main.obj" \
+"./phase_triggers.obj" \
 "./device/F2837xD_CodeStartBranch.obj" \
 "./device/device.obj" \
 "../2837xD_RAM_lnk_cpu1.cmd" \
@@ -146,8 +148,8 @@ logturtle_tuning_pm.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "F2837xD_GlobalVariableDefs.obj" "cla_tasks.obj" "syscfg\board.obj" "syscfg\c2000ware_libraries.obj" "main.obj" "device\F2837xD_CodeStartBranch.obj" "device\device.obj" 
-	-$(RM) "F2837xD_GlobalVariableDefs.d" "syscfg\board.d" "syscfg\c2000ware_libraries.d" "main.d" "device\device.d" 
+	-$(RM) "F2837xD_GlobalVariableDefs.obj" "cla_tasks.obj" "hrpwm_control.obj" "syscfg\board.obj" "syscfg\c2000ware_libraries.obj" "main.obj" "phase_triggers.obj" "device\F2837xD_CodeStartBranch.obj" "device\device.obj" 
+	-$(RM) "F2837xD_GlobalVariableDefs.d" "hrpwm_control.d" "syscfg\board.d" "syscfg\c2000ware_libraries.d" "main.d" "phase_triggers.d" "device\device.d" 
 	-$(RM) "cla_tasks.d" 
 	-$(RM) "device\F2837xD_CodeStartBranch.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)

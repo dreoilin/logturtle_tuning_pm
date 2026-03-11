@@ -16,9 +16,11 @@ CLA_SRCS += \
 
 C_SRCS += \
 ../F2837xD_GlobalVariableDefs.c \
+../hrpwm_control.c \
 ./syscfg/board.c \
 ./syscfg/c2000ware_libraries.c \
-../main.c 
+../main.c \
+../phase_triggers.c 
 
 GEN_FILES += \
 ./syscfg/board.c \
@@ -34,9 +36,11 @@ GEN_MISC_DIRS += \
 
 C_DEPS += \
 ./F2837xD_GlobalVariableDefs.d \
+./hrpwm_control.d \
 ./syscfg/board.d \
 ./syscfg/c2000ware_libraries.d \
-./main.d 
+./main.d \
+./phase_triggers.d 
 
 GEN_OPTS += \
 ./syscfg/board.opt \
@@ -45,9 +49,11 @@ GEN_OPTS += \
 OBJS += \
 ./F2837xD_GlobalVariableDefs.obj \
 ./cla_tasks.obj \
+./hrpwm_control.obj \
 ./syscfg/board.obj \
 ./syscfg/c2000ware_libraries.obj \
-./main.obj 
+./main.obj \
+./phase_triggers.obj 
 
 GEN_MISC_FILES += \
 ./syscfg/board.h \
@@ -65,9 +71,11 @@ GEN_MISC_DIRS__QUOTED += \
 OBJS__QUOTED += \
 "F2837xD_GlobalVariableDefs.obj" \
 "cla_tasks.obj" \
+"hrpwm_control.obj" \
 "syscfg\board.obj" \
 "syscfg\c2000ware_libraries.obj" \
-"main.obj" 
+"main.obj" \
+"phase_triggers.obj" 
 
 GEN_MISC_FILES__QUOTED += \
 "syscfg\board.h" \
@@ -81,9 +89,11 @@ GEN_MISC_FILES__QUOTED += \
 
 C_DEPS__QUOTED += \
 "F2837xD_GlobalVariableDefs.d" \
+"hrpwm_control.d" \
 "syscfg\board.d" \
 "syscfg\c2000ware_libraries.d" \
-"main.d" 
+"main.d" \
+"phase_triggers.d" 
 
 GEN_FILES__QUOTED += \
 "syscfg\board.c" \
@@ -96,9 +106,11 @@ CLA_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../F2837xD_GlobalVariableDefs.c" \
+"../hrpwm_control.c" \
 "./syscfg/board.c" \
 "./syscfg/c2000ware_libraries.c" \
-"../main.c" 
+"../main.c" \
+"../phase_triggers.c" 
 
 SYSCFG_SRCS__QUOTED += \
 "../logturtle.syscfg" 

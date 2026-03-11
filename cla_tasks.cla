@@ -12,16 +12,16 @@ interrupt void Cla1Task1(void)
     uint32_t aux_cmp_q8;
 
     // Latch a new CPU command when idle
-    if((cla_state_active == 0U) && (cla_cmd_seq != cla_cmd_ack_seq))
+    if((claToCpuMsg.state_active == 0U) && (cpuToClaMsg.cmd_seq != claToCpuMsg.cmd_ack_seq))
     {
-        cla_cmd_ack_seq           = cla_cmd_seq;
-        cla_state_direction        = cla_cmd_direction;
-        cla_state_cycles_remaining = cla_cmd_cycles;
-        cla_state_active           = (cla_cmd_cycles > 0U) ? 1U : 0U;
+        claToCpuMsg.cmd_ack_seq           = cpuToClaMsg.cmd_seq;
+        claToCpuMsg.state_direction        = cpuToClaMsg.cmd_direction;
+        claToCpuMsg.state_cycles_remaining = cpuToClaMsg.cmd_cycles;
+        claToCpuMsg.state_active           = (cpuToClaMsg.cmd_cycles > 0U) ? 1U : 0U;
     }
 
     // Idle: nothing to do, just clear EPWM1 INT flag and exit
-    if(cla_state_active == 0U)
+    if(claToCpuMsg.state_active == 0U)
     {
         HWREGH(EPWM1_BASE + EPWM_O_ETCLR) = EPWM_ETCLR_INT;
         return;
@@ -30,21 +30,21 @@ interrupt void Cla1Task1(void)
     //cla_task1_hits++;
 
     // Active shift window: apply fast/slow for exactly N cycles
-    if(cla_state_cycles_remaining > 0U)
+    if(claToCpuMsg.state_cycles_remaining > 0U)
     {
-        if(cla_state_direction == PHASE_LEAD)
+        if(claToCpuMsg.state_direction == PHASE_LEAD)
         {
-            prd_q8 = cla_period_hr_fast_q8-1;
-            cmp_q8 = cla_cmpa_hr_fast_q8;
-            aux_prd_q8 = cla_aux_period_hr_fast_q8;
-            aux_cmp_q8 = cla_aux_cmpa_hr_fast_q8;
+            prd_q8 = cpuToClaMsg.epwm1_period_hr_q8.fast - 1U;
+            cmp_q8 = cpuToClaMsg.epwm1_cmpa_hr_q8.fast;
+            aux_prd_q8 = cpuToClaMsg.aux_period_hr_q8.fast;
+            aux_cmp_q8 = cpuToClaMsg.aux_cmpa_hr_q8.fast;
         }
         else
         {
-            prd_q8 = cla_period_hr_slow_q8-1;
-            cmp_q8 = cla_cmpa_hr_slow_q8;
-            aux_prd_q8 = cla_aux_period_hr_slow_q8;
-            aux_cmp_q8 = cla_aux_cmpa_hr_slow_q8;
+            prd_q8 = cpuToClaMsg.epwm1_period_hr_q8.slow - 1U;
+            cmp_q8 = cpuToClaMsg.epwm1_cmpa_hr_q8.slow;
+            aux_prd_q8 = cpuToClaMsg.aux_period_hr_q8.slow;
+            aux_cmp_q8 = cpuToClaMsg.aux_cmpa_hr_q8.slow;
         }
 
         HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (prd_q8 << 8U);
@@ -56,22 +56,22 @@ interrupt void Cla1Task1(void)
         HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (aux_prd_q8 << 8U);
         HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (aux_cmp_q8 << 8U);
 
-        cla_state_cycles_remaining--;
+        claToCpuMsg.state_cycles_remaining--;
     }
     else
     {
         // Restore nominal after N shifted cycles
-        HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (cla_period_hr_normal_q8-1 << 8U);
-        HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = (cla_cmpa_hr_normal_q8-1 << 8U);
+        HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = ((cpuToClaMsg.epwm1_period_hr_q8.normal - 1U) << 8U);
+        HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = ((cpuToClaMsg.epwm1_cmpa_hr_q8.normal - 1U) << 8U);
 
-        HWREG(EPWM2_BASE + HRPWM_O_TBPRDHR) = (cla_aux_period_hr_normal_q8 << 8U);
-        HWREG(EPWM2_BASE + HRPWM_O_CMPA)    = (cla_aux_cmpa_hr_normal_q8 << 8U);
-        HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (cla_aux_period_hr_normal_q8 << 8U);
-        HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (cla_aux_cmpa_hr_normal_q8 << 8U);
+        HWREG(EPWM2_BASE + HRPWM_O_TBPRDHR) = (cpuToClaMsg.aux_period_hr_q8.normal << 8U);
+        HWREG(EPWM2_BASE + HRPWM_O_CMPA)    = (cpuToClaMsg.aux_cmpa_hr_q8.normal << 8U);
+        HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (cpuToClaMsg.aux_period_hr_q8.normal << 8U);
+        HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (cpuToClaMsg.aux_cmpa_hr_q8.normal << 8U);
 
-        cla_state_direction = PHASE_NONE;
-        cla_state_active    = 0U;
-        cla_done_count++;
+        claToCpuMsg.state_direction = PHASE_NONE;
+        claToCpuMsg.state_active    = 0U;
+        claToCpuMsg.done_count++;
     }
 
     // Re-arm EPWM1INT trigger for next CLA run

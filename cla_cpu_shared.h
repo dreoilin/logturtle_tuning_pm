@@ -2,11 +2,6 @@
 #define CLA_CPU_SHARED_H
 
 #include <stdint.h>
-//#include "F2837xD_device.h" // For C2000 types
-
-#ifndef float32_t
-typedef float float32_t;
-#endif
 
 // Phase command values
 #define PHASE_NONE 0U
@@ -17,32 +12,38 @@ typedef float float32_t;
 #define N_PHASE_CYCLES 4U
 #define PHASE_DEN      (4U * N_PHASE_CYCLES)
 
-// CPU -> CLA command mailbox
-extern volatile uint16_t cla_cmd_direction;
-extern volatile uint16_t cla_cmd_cycles;
-extern volatile uint16_t cla_cmd_seq;
+typedef struct
+{
+	uint32_t normal;
+	uint32_t slow;
+	uint32_t fast;
+} ClaQ8Triplet;
 
-// CLA -> CPU status mailbox
-extern volatile uint16_t cla_state_direction;
-extern volatile uint16_t cla_state_cycles_remaining;
-extern volatile uint16_t cla_state_active;
-extern volatile uint16_t cla_cmd_ack_seq;
-extern volatile uint32_t cla_done_count;
+// CPU -> CLA mailbox (CpuToCla1MsgRAM): CPU writes, CLA reads.
+typedef struct
+{
+	uint16_t cmd_direction;
+	uint16_t cmd_cycles;
+	uint16_t cmd_seq;
+	uint16_t reserved0;
 
-// CLA-owned cmpa and periods for ePWM1 (Q8 consolidated format)
-extern volatile uint32_t cla_period_hr_normal_q8;
-extern volatile uint32_t cla_period_hr_slow_q8;
-extern volatile uint32_t cla_period_hr_fast_q8;
-extern volatile uint32_t cla_cmpa_hr_normal_q8;
-extern volatile uint32_t cla_cmpa_hr_slow_q8;
-extern volatile uint32_t cla_cmpa_hr_fast_q8;
+	ClaQ8Triplet epwm1_period_hr_q8;
+	ClaQ8Triplet epwm1_cmpa_hr_q8;
+	ClaQ8Triplet aux_period_hr_q8;
+	ClaQ8Triplet aux_cmpa_hr_q8;
+} CpuToClaMsg;
 
-// CLA-owned cmpa and periods for ePWM2/3 (Q8 consolidated format)
-extern volatile uint32_t cla_aux_period_hr_normal_q8;
-extern volatile uint32_t cla_aux_period_hr_fast_q8;
-extern volatile uint32_t cla_aux_period_hr_slow_q8;
-extern volatile uint32_t cla_aux_cmpa_hr_normal_q8;
-extern volatile uint32_t cla_aux_cmpa_hr_fast_q8;
-extern volatile uint32_t cla_aux_cmpa_hr_slow_q8;
+// CLA -> CPU mailbox (Cla1ToCpuMsgRAM): CLA writes, CPU reads.
+typedef struct
+{
+	uint16_t state_direction;
+	uint16_t state_cycles_remaining;
+	uint16_t state_active;
+	uint16_t cmd_ack_seq;
+	uint32_t done_count;
+} ClaToCpuMsg;
+
+extern volatile CpuToClaMsg cpuToClaMsg;
+extern volatile ClaToCpuMsg claToCpuMsg;
 
 #endif

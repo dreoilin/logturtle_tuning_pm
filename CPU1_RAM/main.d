@@ -92,6 +92,8 @@ main.obj: syscfg/board.h
 main.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/device.h
 main.obj: C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/SFO_V8.h
 main.obj: ../cla_cpu_shared.h
+main.obj: ../hrpwm_control.h
+main.obj: ../phase_triggers.h
 
 ../main.c:
 
@@ -276,4 +278,8 @@ C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/device.h:
 C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/SFO_V8.h:
 
 ../cla_cpu_shared.h:
+
+../hrpwm_control.h:
+
+../phase_triggers.h:
 
