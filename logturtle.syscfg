@@ -1,0 +1,75 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "F2837xD" --part "F2837xD_176PTP" --package "F2837xD_176PTP" --context "CPU1" --product "C2000WARE@6.00.01.00"
+ * @v2CliArgs --device "TMS320F28378D" --package "176PTP" --context "CPU1" --product "C2000WARE@6.00.01.00"
+ * @versions {"tool":"1.26.0+4407"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const cla        = scripting.addModule("/driverlib/cla.js", {}, false);
+const cla1       = cla.addInstance();
+const epwm       = scripting.addModule("/driverlib/epwm.js", {}, false);
+const epwm1      = epwm.addInstance();
+const epwm2      = epwm.addInstance();
+const epwm3      = epwm.addInstance();
+const epwm4      = epwm.addInstance();
+const inputxbar  = scripting.addModule("/driverlib/inputxbar.js", {}, false);
+const inputxbar1 = inputxbar.addInstance();
+const memcfg     = scripting.addModule("/driverlib/memcfg.js");
+const sysctl     = scripting.addModule("/driverlib/sysctl.js");
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+cla1.$name = "myCLA0";
+
+const divider3 = system.clockTree["EPWMCLKDIV"];
+scripting.suppress("ePWM TZFRC and TZCLR events will sometimes be missed when EPWMCLKDIV is divide by 2\\. Always program EPWMCLKDIV to divide by 1 if using TZFRC or TZCLR register\\. Please refer to the F2837xD Silicon Errata for more details\\.", divider3, "EPWMCLK");
+
+const default_warning = scripting.addModule("/driverlib/default_warning.js", {}, false);
+scripting.suppress("Add the \'Device Support\' module in order to use Clock Tree tool and generate device support files\\. This suggestion can be ignored if not using the Clock Tree tool\\.", default_warning);
+
+epwm1.$name                                 = "myEPWM1";
+epwm1.epwmTimebase_hsClockDiv               = "EPWM_HSCLOCK_DIVIDER_1";
+epwm1.hrpwm_enable                          = true;
+epwm1.hrpwm_autoConv                        = true;
+epwm1.hrpwm_enableCalculator                = true;
+epwm1.epwmDeadband_deadbandCounterClockRate = "EPWM_DB_COUNTER_CLOCK_HALF_CYCLE";
+epwm1.epwmDeadband_polarityFED              = "EPWM_DB_POLARITY_ACTIVE_LOW";
+epwm1.epwmDeadband_enableRED                = true;
+epwm1.epwmDeadband_enableFED                = true;
+epwm1.epwmTimebase_syncOutPulseMode         = "EPWM_SYNC_OUT_PULSE_ON_COUNTER_ZERO";
+epwm1.epwmTimebase_counterMode              = "EPWM_COUNTER_MODE_UP";
+epwm1.hrpwm_edgeModeDB                      = "HRPWM_DB_MEP_CTRL_RED_FED";
+epwm1.hrpwm_periodEnable                    = true;
+epwm1.hrpwm_DBBOutput                       = "HRPWM_OUTPUT_ON_B_INV_A";
+epwm1.epwm.$assign                          = "EPWM1";
+epwm1.epwm.epwm_aPin.$assign                = "GPIO0";
+epwm1.epwm.epwm_bPin.$assign                = "GPIO1";
+
+epwm2.$name                  = "myEPWM2";
+epwm2.epwm.$assign           = "EPWM2";
+epwm2.epwm.epwm_aPin.$assign = "GPIO2";
+epwm2.epwm.epwm_bPin.$assign = "GPIO3";
+
+epwm3.$name                  = "myEPWM3";
+epwm3.epwm.$assign           = "EPWM3";
+epwm3.epwm.epwm_aPin.$assign = "GPIO4";
+epwm3.epwm.epwm_bPin.$assign = "GPIO5";
+
+epwm4.$name                  = "myEPWM4";
+epwm4.epwm.$assign           = "EPWM4";
+epwm4.epwm.epwm_aPin.$assign = "GPIO6";
+epwm4.epwm.epwm_bPin.$assign = "GPIO7";
+
+inputxbar1.$name = "myINPUTXBAR5";
+
+memcfg.config_MEMCFG_SECT_LS5        = "CLA_prog";
+memcfg.config_MEMCFG_SECT_LS0        = "CLA_data";
+memcfg.config_MEMCFG_SECT_LS1        = "CLA_data";
+memcfg.config_MEMCFG_SECT_LS4        = "CLA_prog";
+memcfg.init_MEMCFG_SECT_MSGCPUTOCLA1 = true;
+memcfg.init_MEMCFG_SECT_MSGCLA1TOCPU = true;

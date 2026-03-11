@@ -1,0 +1,96 @@
+#include "cla_cpu_shared.h"
+#include "driverlib/inc/hw_memmap.h"
+#include "driverlib/inc/hw_types.h"
+#include "driverlib/inc/hw_epwm.h"
+#include "driverlib/inc/hw_hrpwm.h"
+
+interrupt void Cla1Task1(void)
+{
+    uint32_t prd_q8;
+    uint32_t cmp_q8;
+
+    // Latch a new CPU command when idle
+    if((cla_state_active == 0U) && (cla_cmd_seq != cla_cmd_ack_seq))
+    {
+        cla_cmd_ack_seq           = cla_cmd_seq;
+        cla_state_direction        = cla_cmd_direction;
+        cla_state_cycles_remaining = cla_cmd_cycles;
+        cla_state_active           = (cla_cmd_cycles > 0U) ? 1U : 0U;
+    }
+
+    // Idle: nothing to do, just clear EPWM1 INT flag and exit
+    if(cla_state_active == 0U)
+    {
+        HWREGH(EPWM1_BASE + EPWM_O_ETCLR) = EPWM_ETCLR_INT;
+        return;
+    }
+
+    cla_task1_hits++;
+
+    // Active shift window: apply fast/slow for exactly N cycles
+    if(cla_state_cycles_remaining > 0U)
+    {
+        if(cla_state_direction == PHASE_LEAD)
+        {
+            prd_q8 = cla_period_hr_fast_q8;
+            cmp_q8 = cla_cmpa_hr_fast_q8;
+        }
+        else
+        {
+            prd_q8 = cla_period_hr_slow_q8;
+            cmp_q8 = cla_cmpa_hr_slow_q8;
+        }
+
+        HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (prd_q8 << 8U);
+        HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = (cmp_q8 << 8U);
+
+        cla_state_cycles_remaining--;
+    }
+    else
+    {
+        // Restore nominal after N shifted cycles
+        HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (cla_period_hr_normal_q8 << 8U);
+        HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = (cla_cmpa_hr_normal_q8 << 8U);
+
+        cla_state_direction = PHASE_NONE;
+        cla_state_active    = 0U;
+        cla_done_count++;
+    }
+
+    // Re-arm EPWM1INT trigger for next CLA run
+    HWREGH(EPWM1_BASE + EPWM_O_ETCLR) = EPWM_ETCLR_INT;
+}
+
+interrupt void Cla1Task2(void)
+{
+    
+}
+interrupt void Cla1Task3 ( void )
+{
+
+}
+
+interrupt void Cla1Task4 ( void )
+{
+
+}
+
+interrupt void Cla1Task5 ( void )
+{
+
+}
+
+interrupt void Cla1Task6 ( void )
+{
+
+}
+
+interrupt void Cla1Task7 ( void )
+{
+
+}
+
+interrupt void Cla1Task8 ( void )
+{
+
+}

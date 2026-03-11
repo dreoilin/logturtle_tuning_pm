@@ -1,0 +1,12 @@
+"./F2837xD_GlobalVariableDefs.obj"
+"./cla_tasks.obj"
+"./syscfg/board.obj"
+"./syscfg/c2000ware_libraries.obj"
+"./main.obj"
+"./device/F2837xD_CodeStartBranch.obj"
+"./device/device.obj"
+"../2837xD_RAM_lnk_cpu1.cmd"
+-llibc.a
+-lSFO_v8_fpu_lib_build_c28.lib
+-ldriverlib_coff.lib
+-lF2837xD_Headers_nonBIOS_cpu1.cmd
