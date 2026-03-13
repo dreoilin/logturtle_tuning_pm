@@ -1,6 +1,7 @@
 # FIXED
 
 hrpwm_control.obj: ../hrpwm_control.c
+hrpwm_control.obj: ../hrpwm_control.h
 hrpwm_control.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib.h
 hrpwm_control.obj: C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/inc/hw_memmap.h
 hrpwm_control.obj: C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/adc.h
@@ -87,9 +88,13 @@ hrpwm_control.obj: C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/upp.h
 hrpwm_control.obj: C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/inc/hw_upp.h
 hrpwm_control.obj: C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/version.h
 hrpwm_control.obj: C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/driver_inclusive_terminology_mapping.h
+hrpwm_control.obj: syscfg/board.h
+hrpwm_control.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/device.h
 hrpwm_control.obj: ../cla_cpu_shared.h
 
 ../hrpwm_control.c:
+
+../hrpwm_control.h:
 
 C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib.h:
 
@@ -262,6 +267,10 @@ C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/inc/hw_upp.h:
 C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/version.h:
 
 C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/driver_inclusive_terminology_mapping.h:
+
+syscfg/board.h:
+
+C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/device.h:
 
 ../cla_cpu_shared.h:
 

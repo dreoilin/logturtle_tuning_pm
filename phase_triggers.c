@@ -26,6 +26,20 @@ void configureLagLeadHardwareTriggers(void)
     Interrupt_enable(INT_XINT2);
 }
 
+void configureClaTuningTriggers(void)
+{
+    // Configure GPIO125
+    GPIO_setDirectionMode(125U, GPIO_DIR_MODE_IN);
+    GPIO_setPadConfig(125U, GPIO_PIN_TYPE_PULLUP);
+    GPIO_setQualificationMode(125U, GPIO_QUAL_SYNC);
+
+    // Configure GPIO29
+    GPIO_setDirectionMode(29U, GPIO_DIR_MODE_IN);
+    GPIO_setPadConfig(29U, GPIO_PIN_TYPE_PULLUP);
+    GPIO_setQualificationMode(29U, GPIO_QUAL_SYNC);
+
+}
+
 __interrupt void xintLeadIsr(void)
 {
     if(claToCpuMsg.state_active == 0U)

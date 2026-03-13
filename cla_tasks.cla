@@ -3,13 +3,174 @@
 #include "driverlib/inc/hw_types.h"
 #include "driverlib/inc/hw_epwm.h"
 #include "driverlib/inc/hw_hrpwm.h"
+#include "driverlib/inc/hw_gpio.h"
+
+#define CLA_SAMPLE_GPIO29()  ((uint16_t)((HWREG(GPIODATA_BASE + GPIO_O_GPADAT) >> 29U) & 1U))
+#define CLA_SAMPLE_GPIO125() ((uint16_t)((HWREG(GPIODATA_BASE + GPIO_O_GPDDAT) >> 29U) & 1U))
+
+static inline int16_t claGetActiveOffset(uint16_t mode)
+{
+    if(mode == CLA_FREQ_MODE_FAST)
+    {
+        return claToCpuMsg.offset_fast;
+    }
+    else if(mode == CLA_FREQ_MODE_SLOW)
+    {
+        return claToCpuMsg.offset_slow;
+    }
+    else
+    {
+        return claToCpuMsg.offset_normal;
+    }
+}
+
+static inline uint32_t claGetAuxCmpBaseQ8(uint16_t mode)
+{
+    if(mode == CLA_FREQ_MODE_FAST)
+    {
+        return cpuToClaMsg.aux_cmpa_hr_q8.fast;
+    }
+    else if(mode == CLA_FREQ_MODE_SLOW)
+    {
+        return cpuToClaMsg.aux_cmpa_hr_q8.slow;
+    }
+    else
+    {
+        return cpuToClaMsg.aux_cmpa_hr_q8.normal;
+    }
+}
+
+static inline uint32_t claGetAuxPrdBaseQ8(uint16_t mode)
+{
+    if(mode == CLA_FREQ_MODE_FAST)
+    {
+        return cpuToClaMsg.aux_period_hr_q8.fast;
+    }
+    else if(mode == CLA_FREQ_MODE_SLOW)
+    {
+        return cpuToClaMsg.aux_period_hr_q8.slow;
+    }
+    else
+    {
+        return cpuToClaMsg.aux_period_hr_q8.normal;
+    }
+}
+
+static inline void claWriteTunedAuxCmp(uint16_t mode)
+{
+    int32_t tunedQ8;
+    uint32_t cmp2bQ8;
+    uint32_t cmp3bQ8;
+    uint32_t prdQ8;
+    uint32_t cmpMinQ8;
+    uint32_t cmpMaxQ8;
+    uint32_t lead2Q8;
+    uint32_t lead3Q8;
+
+    tunedQ8 = (int32_t)claGetAuxCmpBaseQ8(mode) + (int32_t)claGetActiveOffset(mode);
+    prdQ8 = claGetAuxPrdBaseQ8(mode);
+    cmpMinQ8 = (prdQ8 * 20U) / 100U;
+    cmpMaxQ8 = (prdQ8 * 80U) / 100U;
+
+    if(tunedQ8 < (int32_t)cmpMinQ8)
+    {
+        tunedQ8 = (int32_t)cmpMinQ8;
+    }
+    else if((uint32_t)tunedQ8 > cmpMaxQ8)
+    {
+        tunedQ8 = (int32_t)cmpMaxQ8;
+    }
+
+    lead2Q8 = ((uint32_t)cpuToClaMsg.epwm2_int_lead_ticks << 8U);
+    lead3Q8 = ((uint32_t)cpuToClaMsg.epwm3_int_lead_ticks << 8U);
+
+    // EPWM2 uses U_CMPB interrupt: trigger before U_CMPA by subtracting lead.
+    cmp2bQ8 = ((uint32_t)tunedQ8 > lead2Q8) ? ((uint32_t)tunedQ8 - lead2Q8) : 0U;
+
+    // EPWM3 uses D_CMPB interrupt: trigger before D_CMPA by adding lead.
+    cmp3bQ8 = (uint32_t)tunedQ8 + lead3Q8;
+    if(cmp3bQ8 >= prdQ8)
+    {
+        cmp3bQ8 = (prdQ8 > 0U) ? (prdQ8 - 1U) : 0U;
+    }
+
+    HWREG(EPWM2_BASE + HRPWM_O_CMPA) = ((uint32_t)tunedQ8 << 8U);
+    HWREG(EPWM3_BASE + HRPWM_O_CMPA) = ((uint32_t)tunedQ8 << 8U);
+    HWREG(EPWM2_BASE + HRPWM_O_CMPB) = (cmp2bQ8 << 8U);
+    HWREG(EPWM3_BASE + HRPWM_O_CMPB) = (cmp3bQ8 << 8U);
+}
+
+static inline void claUpdateTuningFromPins(void)
+{
+    uint16_t pin29;
+    uint16_t pin125;
+    uint16_t xnorValue;
+    uint16_t mode;
+    int16_t  new_offset;
+    int16_t  offset_min;
+    int16_t  offset_max;
+    int16_t  adjustment;
+    uint32_t prdQ8;
+    uint32_t baseQ8;
+
+    pin29 = CLA_SAMPLE_GPIO29();
+    pin125 = CLA_SAMPLE_GPIO125();
+    xnorValue = (uint16_t)((pin29 == pin125) ? 1U : 0U);
+    mode = claToCpuMsg.tuning_mode;
+
+    claToCpuMsg.tuning_pin_29 = pin29;
+    claToCpuMsg.tuning_pin_125 = pin125;
+    claToCpuMsg.tuning_xnor = xnorValue;
+
+    // calculate the adjustment based on logic
+    if (xnorValue != 0U) 
+    {
+        // Count enabled: Pin 29 defines direction (1 = Up, 0 = Down)
+        adjustment = (pin29 != 0U) ? 1 : -1; 
+    }
+    else 
+    {
+        // Count disabled: Hold steady
+        adjustment = 0; 
+    }
+
+    // Compute per-mode saturation limits so the accumulator
+    // never exceeds the [20%, 80%] CMPA clamp window.
+    prdQ8      = claGetAuxPrdBaseQ8(mode);
+    baseQ8     = claGetAuxCmpBaseQ8(mode);
+    offset_min = (int16_t)((int32_t)((prdQ8 * 20U) / 100U) - (int32_t)baseQ8);
+    offset_max = (int16_t)((int32_t)((prdQ8 * 80U) / 100U) - (int32_t)baseQ8);
+
+    if(mode == CLA_FREQ_MODE_FAST)
+    {
+        new_offset = claToCpuMsg.offset_fast + adjustment;
+        if(new_offset > offset_max) new_offset = offset_max;
+        if(new_offset < offset_min) new_offset = offset_min;
+        claToCpuMsg.offset_fast = new_offset;
+    }
+    else if(mode == CLA_FREQ_MODE_SLOW)
+    {
+        new_offset = claToCpuMsg.offset_slow + adjustment;
+        if(new_offset > offset_max) new_offset = offset_max;
+        if(new_offset < offset_min) new_offset = offset_min;
+        claToCpuMsg.offset_slow = new_offset;
+    }
+    else
+    {
+        new_offset = claToCpuMsg.offset_normal + adjustment;
+        if(new_offset > offset_max) new_offset = offset_max;
+        if(new_offset < offset_min) new_offset = offset_min;
+        claToCpuMsg.offset_normal = new_offset;
+    }
+
+    claWriteTunedAuxCmp(mode);
+}
 
 interrupt void Cla1Task1(void)
 {
     uint32_t prd_q8;
     uint32_t cmp_q8;
     uint32_t aux_prd_q8;
-    uint32_t aux_cmp_q8;
 
     // Latch a new CPU command when idle
     if((claToCpuMsg.state_active == 0U) && (cpuToClaMsg.cmd_seq != claToCpuMsg.cmd_ack_seq))
@@ -23,6 +184,7 @@ interrupt void Cla1Task1(void)
     // Idle: nothing to do, just clear EPWM1 INT flag and exit
     if(claToCpuMsg.state_active == 0U)
     {
+        claToCpuMsg.tuning_mode = CLA_FREQ_MODE_NORMAL;
         HWREGH(EPWM1_BASE + EPWM_O_ETCLR) = EPWM_ETCLR_INT;
         return;
     }
@@ -34,17 +196,17 @@ interrupt void Cla1Task1(void)
     {
         if(claToCpuMsg.state_direction == PHASE_LEAD)
         {
+            claToCpuMsg.tuning_mode = CLA_FREQ_MODE_FAST;
             prd_q8 = cpuToClaMsg.epwm1_period_hr_q8.fast - 1U;
             cmp_q8 = cpuToClaMsg.epwm1_cmpa_hr_q8.fast;
             aux_prd_q8 = cpuToClaMsg.aux_period_hr_q8.fast;
-            aux_cmp_q8 = cpuToClaMsg.aux_cmpa_hr_q8.fast;
         }
         else
         {
+            claToCpuMsg.tuning_mode = CLA_FREQ_MODE_SLOW;
             prd_q8 = cpuToClaMsg.epwm1_period_hr_q8.slow - 1U;
             cmp_q8 = cpuToClaMsg.epwm1_cmpa_hr_q8.slow;
             aux_prd_q8 = cpuToClaMsg.aux_period_hr_q8.slow;
-            aux_cmp_q8 = cpuToClaMsg.aux_cmpa_hr_q8.slow;
         }
 
         HWREG(EPWM1_BASE + HRPWM_O_TBPRDHR) = (prd_q8 << 8U);
@@ -52,9 +214,8 @@ interrupt void Cla1Task1(void)
 
         // ePWM2/3 (up-down count)
         HWREG(EPWM2_BASE + HRPWM_O_TBPRDHR) = (aux_prd_q8 << 8U);
-        HWREG(EPWM2_BASE + HRPWM_O_CMPA)    = (aux_cmp_q8 << 8U);
         HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (aux_prd_q8 << 8U);
-        HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (aux_cmp_q8 << 8U);
+        claWriteTunedAuxCmp(claToCpuMsg.tuning_mode);
 
         claToCpuMsg.state_cycles_remaining--;
     }
@@ -65,9 +226,10 @@ interrupt void Cla1Task1(void)
         HWREG(EPWM1_BASE + HRPWM_O_CMPA)    = ((cpuToClaMsg.epwm1_cmpa_hr_q8.normal - 1U) << 8U);
 
         HWREG(EPWM2_BASE + HRPWM_O_TBPRDHR) = (cpuToClaMsg.aux_period_hr_q8.normal << 8U);
-        HWREG(EPWM2_BASE + HRPWM_O_CMPA)    = (cpuToClaMsg.aux_cmpa_hr_q8.normal << 8U);
         HWREG(EPWM3_BASE + HRPWM_O_TBPRDHR) = (cpuToClaMsg.aux_period_hr_q8.normal << 8U);
-        HWREG(EPWM3_BASE + HRPWM_O_CMPA)    = (cpuToClaMsg.aux_cmpa_hr_q8.normal << 8U);
+
+        claToCpuMsg.tuning_mode = CLA_FREQ_MODE_NORMAL;
+        claWriteTunedAuxCmp(CLA_FREQ_MODE_NORMAL);
 
         claToCpuMsg.state_direction = PHASE_NONE;
         claToCpuMsg.state_active    = 0U;
@@ -80,11 +242,14 @@ interrupt void Cla1Task1(void)
 
 interrupt void Cla1Task2(void)
 {
-    
+    claUpdateTuningFromPins();
+    HWREGH(EPWM2_BASE + EPWM_O_ETCLR) = EPWM_ETCLR_INT;
 }
-interrupt void Cla1Task3 ( void )
-{
 
+interrupt void Cla1Task3(void)
+{
+    claUpdateTuningFromPins();
+    HWREGH(EPWM3_BASE + EPWM_O_ETCLR) = EPWM_ETCLR_INT;
 }
 
 interrupt void Cla1Task4 ( void )

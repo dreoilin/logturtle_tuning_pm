@@ -122,6 +122,22 @@ extern "C"
 #define myEPWM4_EPWMB_GPIO 7
 #define myEPWM4_EPWMB_PIN_CONFIG GPIO_7_EPWM4B
 
+//
+// EPWM5 -> myEPWM5 Pinmux
+//
+//
+// EPWM5A - GPIO Settings
+//
+#define GPIO_PIN_EPWM5A 8
+#define myEPWM5_EPWMA_GPIO 8
+#define myEPWM5_EPWMA_PIN_CONFIG GPIO_8_EPWM5A
+//
+// EPWM5B - GPIO Settings
+//
+#define GPIO_PIN_EPWM5B 9
+#define myEPWM5_EPWMB_GPIO 9
+#define myEPWM5_EPWMB_PIN_CONFIG GPIO_9_EPWM5B
+
 //*****************************************************************************
 //
 // CLA Configurations
@@ -202,6 +218,19 @@ void myCLA0_init();
 #define myEPWM4_TZA_ACTION EPWM_TZ_ACTION_HIGH_Z
 #define myEPWM4_TZB_ACTION EPWM_TZ_ACTION_HIGH_Z
 #define myEPWM4_INTERRUPT_SOURCE EPWM_INT_TBCTR_DISABLED
+#define myEPWM5_BASE EPWM5_BASE
+#define myEPWM5_TBPRD 0
+#define myEPWM5_COUNTER_MODE EPWM_COUNTER_MODE_STOP_FREEZE
+#define myEPWM5_TBPHS 0
+#define myEPWM5_CMPA 0
+#define myEPWM5_CMPB 0
+#define myEPWM5_CMPC 0
+#define myEPWM5_CMPD 0
+#define myEPWM5_DBRED 0
+#define myEPWM5_DBFED 0
+#define myEPWM5_TZA_ACTION EPWM_TZ_ACTION_HIGH_Z
+#define myEPWM5_TZB_ACTION EPWM_TZ_ACTION_HIGH_Z
+#define myEPWM5_INTERRUPT_SOURCE EPWM_INT_TBCTR_DISABLED
 
 //*****************************************************************************
 //

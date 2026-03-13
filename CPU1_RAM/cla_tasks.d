@@ -16,6 +16,7 @@ cla_tasks.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driv
 cla_tasks.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_types.h
 cla_tasks.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_epwm.h
 cla_tasks.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_hrpwm.h
+cla_tasks.obj: C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_gpio.h
 
 ../cla_tasks.cla:
 
@@ -48,4 +49,6 @@ C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_ty
 C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_epwm.h:
 
 C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_hrpwm.h:
+
+C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/driverlib/inc/hw_gpio.h:
 

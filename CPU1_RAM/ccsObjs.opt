@@ -1,5 +1,7 @@
 "./F2837xD_GlobalVariableDefs.obj"
 "./cla_tasks.obj"
+"./comparator_dac.obj"
+"./epwm_interrupts.obj"
 "./hrpwm_control.obj"
 "./syscfg/board.obj"
 "./syscfg/c2000ware_libraries.obj"

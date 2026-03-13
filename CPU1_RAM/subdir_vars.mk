@@ -16,6 +16,8 @@ CLA_SRCS += \
 
 C_SRCS += \
 ../F2837xD_GlobalVariableDefs.c \
+../comparator_dac.c \
+../epwm_interrupts.c \
 ../hrpwm_control.c \
 ./syscfg/board.c \
 ./syscfg/c2000ware_libraries.c \
@@ -36,6 +38,8 @@ GEN_MISC_DIRS += \
 
 C_DEPS += \
 ./F2837xD_GlobalVariableDefs.d \
+./comparator_dac.d \
+./epwm_interrupts.d \
 ./hrpwm_control.d \
 ./syscfg/board.d \
 ./syscfg/c2000ware_libraries.d \
@@ -49,6 +53,8 @@ GEN_OPTS += \
 OBJS += \
 ./F2837xD_GlobalVariableDefs.obj \
 ./cla_tasks.obj \
+./comparator_dac.obj \
+./epwm_interrupts.obj \
 ./hrpwm_control.obj \
 ./syscfg/board.obj \
 ./syscfg/c2000ware_libraries.obj \
@@ -71,6 +77,8 @@ GEN_MISC_DIRS__QUOTED += \
 OBJS__QUOTED += \
 "F2837xD_GlobalVariableDefs.obj" \
 "cla_tasks.obj" \
+"comparator_dac.obj" \
+"epwm_interrupts.obj" \
 "hrpwm_control.obj" \
 "syscfg\board.obj" \
 "syscfg\c2000ware_libraries.obj" \
@@ -89,6 +97,8 @@ GEN_MISC_FILES__QUOTED += \
 
 C_DEPS__QUOTED += \
 "F2837xD_GlobalVariableDefs.d" \
+"comparator_dac.d" \
+"epwm_interrupts.d" \
 "hrpwm_control.d" \
 "syscfg\board.d" \
 "syscfg\c2000ware_libraries.d" \
@@ -106,6 +116,8 @@ CLA_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../F2837xD_GlobalVariableDefs.c" \
+"../comparator_dac.c" \
+"../epwm_interrupts.c" \
 "../hrpwm_control.c" \
 "./syscfg/board.c" \
 "./syscfg/c2000ware_libraries.c" \

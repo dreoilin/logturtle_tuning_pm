@@ -16,6 +16,7 @@ const epwm1      = epwm.addInstance();
 const epwm2      = epwm.addInstance();
 const epwm3      = epwm.addInstance();
 const epwm4      = epwm.addInstance();
+const epwm5      = epwm.addInstance();
 const inputxbar  = scripting.addModule("/driverlib/inputxbar.js", {}, false);
 const inputxbar1 = inputxbar.addInstance();
 const memcfg     = scripting.addModule("/driverlib/memcfg.js");
@@ -65,6 +66,8 @@ epwm4.epwm.$assign           = "EPWM4";
 epwm4.epwm.epwm_aPin.$assign = "GPIO6";
 epwm4.epwm.epwm_bPin.$assign = "GPIO7";
 
+epwm5.$name = "myEPWM5";
+
 inputxbar1.$name = "myINPUTXBAR5";
 
 memcfg.config_MEMCFG_SECT_LS5        = "CLA_prog";
@@ -73,3 +76,12 @@ memcfg.config_MEMCFG_SECT_LS1        = "CLA_data";
 memcfg.config_MEMCFG_SECT_LS4        = "CLA_prog";
 memcfg.init_MEMCFG_SECT_MSGCPUTOCLA1 = true;
 memcfg.init_MEMCFG_SECT_MSGCLA1TOCPU = true;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+epwm5.epwm.$suggestSolution           = "EPWM5";
+epwm5.epwm.epwm_aPin.$suggestSolution = "GPIO8";
+epwm5.epwm.epwm_bPin.$suggestSolution = "GPIO9";
