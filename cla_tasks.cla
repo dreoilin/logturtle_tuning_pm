@@ -122,6 +122,30 @@ static inline void claUpdateTuningFromPins(void)
     claToCpuMsg.tuning_pin_125 = pin125;
     claToCpuMsg.tuning_xnor = xnorValue;
 
+    prdQ8      = claGetAuxPrdBaseQ8(mode);
+    baseQ8     = claGetAuxCmpBaseQ8(mode);
+    offset_min = (int16_t)((int32_t)((prdQ8 * 20U) / 100U) - (int32_t)baseQ8);
+    offset_max = (int16_t)((int32_t)((prdQ8 * 80U) / 100U) - (int32_t)baseQ8);
+
+    if(cpuToClaMsg.manual_aux_duty_override !=0U){
+        new_offset = cpuToClaMsg.manual_offset_value;
+        if(new_offset > offset_max) new_offset = offset_max;
+        if(new_offset < offset_min) new_offset = offset_min;
+
+        if(mode == CLA_FREQ_MODE_FAST){
+            claToCpuMsg.offset_fast = new_offset;
+        }
+        else if(mode == CLA_FREQ_MODE_SLOW){
+            claToCpuMsg.offset_slow = new_offset;
+        }
+        else{
+            claToCpuMsg.offset_normal = new_offset;
+        }
+
+        claWriteTunedAuxCmp(mode);
+        return;
+    }
+
     // calculate the adjustment based on logic
     if (xnorValue != 0U) 
     {
@@ -136,10 +160,10 @@ static inline void claUpdateTuningFromPins(void)
 
     // Compute per-mode saturation limits so the accumulator
     // never exceeds the [20%, 80%] CMPA clamp window.
-    prdQ8      = claGetAuxPrdBaseQ8(mode);
-    baseQ8     = claGetAuxCmpBaseQ8(mode);
-    offset_min = (int16_t)((int32_t)((prdQ8 * 20U) / 100U) - (int32_t)baseQ8);
-    offset_max = (int16_t)((int32_t)((prdQ8 * 80U) / 100U) - (int32_t)baseQ8);
+    //prdQ8      = claGetAuxPrdBaseQ8(mode);
+    //baseQ8     = claGetAuxCmpBaseQ8(mode);
+    //offset_min = (int16_t)((int32_t)((prdQ8 * 20U) / 100U) - (int32_t)baseQ8);
+    //offset_max = (int16_t)((int32_t)((prdQ8 * 80U) / 100U) - (int32_t)baseQ8);
 
     if(mode == CLA_FREQ_MODE_FAST)
     {
@@ -159,7 +183,7 @@ static inline void claUpdateTuningFromPins(void)
     {
         new_offset = claToCpuMsg.offset_normal + adjustment;
         if(new_offset > offset_max) new_offset = offset_max;
-        if(new_offset < offset_min) new_offset = offset_min;
+       if(new_offset < offset_min) new_offset = offset_min;
         claToCpuMsg.offset_normal = new_offset;
     }
 

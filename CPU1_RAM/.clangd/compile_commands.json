@@ -1,47 +1,72 @@
 [
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/F2837xD_GlobalVariableDefs.c"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/main.c"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/cla_tasks.cla"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\"",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/F2837xD_CodeStartBranch.asm"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device/device.c"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/hrpwm_control.c"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/phase_triggers.c"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/epwm_interrupts.c"
    },
    {
       "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
-      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -xc",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
       "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/comparator_dac.c"
+   },
+   {
+      "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
+      "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/encoder.c"
+   },
+   {
+      "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
+      "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg/board.c"
+   },
+   {
+      "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
+      "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg/c2000ware_libraries.c"
+   },
+   {
+      "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
+      "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/spi_reference.c"
+   },
+   {
+      "directory" : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM",
+      "command"   : "clang++ -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm\" -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/device\" -I\"C:/ti/C2000Ware_6_00_01_00/driverlib/f2837xd/driverlib/\" -I\"C:/ti/C2000Ware_6_00_01_00/libraries/calibration/hrpwm/f2837xd/include/\" -I\"C:/ti/ccs2041/ccs/tools/compiler/ti-cgt-c2000_22.6.3.LTS/include\" -I\"C:/ti/C2000Ware_6_00_01_00/device_support/f2837xd/headers/include\" -DDEBUG -DCPU1 -I\"C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/CPU1_RAM/syscfg\" -DF2837xD=1 -xc",
+      "file"      : "C:/Users/ciano/workspace_ccstheia/logturtle_tuning_pm/tuning_targets.c"
    }
 ]

@@ -30,11 +30,14 @@ typedef struct
 	uint16_t cmd_direction;
 	uint16_t cmd_cycles;
 	uint16_t cmd_seq;
-	uint16_t reserved0;
+	//uint16_t reserved0;
+	uint16_t manual_aux_duty_override;
 
 	uint16_t epwm2_int_lead_ticks;
 	uint16_t epwm3_int_lead_ticks;
-	uint16_t reserved2;
+	//uint16_t reserved2;
+	int16_t manual_offset_value;
+	
 	uint16_t reserved3;
 
 	ClaQ8Triplet epwm1_period_hr_q8;

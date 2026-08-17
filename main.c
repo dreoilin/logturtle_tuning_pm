@@ -8,11 +8,17 @@
 #include "comparator_dac.h"
 #include "epwm_interrupts.h"
 #include "phase_triggers.h"
+#include "encoder.h"
+#include "spi_reference.h"
+#include "tuning_targets.h"
 
 // Defines
-#define EPWM_TIMER_TBPRD            100UL
+#define EPWM_TIMER_TBPRD            200UL
 #define COMP_DAC_OFFSET_A_VOLTS     1.500f
 #define COMP_DAC_OFFSET_B_VOLTS     1.500f
+
+// TEMPORARY
+#define TEMP_BYPASS_SFO_WAIT 1
 
 // Globals
 
@@ -128,21 +134,65 @@ static void runBackgroundCalibration(void)
 
 void main(void)
 {
+    uint32_t activePeriod;
+    uint32_t lastPeriod;
+    uint32_t auxPeriod;
+
+    activePeriod = EPWM_TIMER_TBPRD;
+    lastPeriod = 0UL;
+
     initializePlatform();
     initializeClaControl();
     initializePowerStage();
 
     configureLagLeadHardwareTriggers();
     configureClaTuningTriggers();
+
+    configureEncoderPins();
+
+    spiReferenceInit();
+    tuningTargetsInit();
+
     initializeControlState();
 
-    EINT;
-    ERTM;
+    //EINT;
+    //ERTM;
 
     for(;;)
     {
-        runBackgroundCalibration();
-        refreshPowerStageHRPWMConfig(EPWM_TIMER_TBPRD);
+        encoderPollUpdate();
+        activePeriod = encoderGetCurrentPeriod();
+        if(activePeriod != lastPeriod)
+        {
+            EALLOW;
+            precomputePhaseShiftPeriodsForCLA(activePeriod);
+                
+            EPWM_setTimeBasePeriod(myEPWM1_BASE, (uint16_t)(activePeriod - 1U));
+            //HRPWM_setTimeBasePeriod(myEPWM1_BASE, ((activePeriod - 1U) << 8U));
+            //HRPWM_setCounterCompareValue(myEPWM1_BASE, HRPWM_COUNTER_COMPARE_A, ((activePeriod/2U)<<8U));
+
+            auxPeriod = activePeriod >> 2U;
+
+            EPWM_setTimeBasePeriod(myEPWM2_BASE, (uint16_t)auxPeriod);
+            //HRPWM_setTimeBasePeriod(myEPWM2_BASE, auxPeriod << 8U);
+
+            EPWM_setTimeBasePeriod(myEPWM3_BASE, (uint16_t)auxPeriod);
+            //HRPWM_setTimeBasePeriod(myEPWM3_BASE, auxPeriod << 8U);
+
+            //EPWM_setTimeBasePeriod(myEPWM4_BASE, (uint16_t)auxPeriod);
+            //HRPWM_setTimeBasePeriod(myEPWM4_BASE, auxPeriod << 8U);
+
+            //EPWM_setTimeBasePeriod(myEPWM5_BASE, (uint16_t)auxPeriod);
+            //HRPWM_setTimeBasePeriod(myEPWM5_BASE, auxPeriod << 8U);
+
+            refreshPowerStageHRPWMConfig(activePeriod);
+            EDIS;
+            lastPeriod = activePeriod;
+        }
+        else{
+            runBackgroundCalibration();
+            refreshPowerStageHRPWMConfig(activePeriod);
+        }
     }
 }
 

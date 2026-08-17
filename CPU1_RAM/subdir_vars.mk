@@ -17,12 +17,15 @@ CLA_SRCS += \
 C_SRCS += \
 ../F2837xD_GlobalVariableDefs.c \
 ../comparator_dac.c \
+../encoder.c \
 ../epwm_interrupts.c \
 ../hrpwm_control.c \
 ./syscfg/board.c \
 ./syscfg/c2000ware_libraries.c \
 ../main.c \
-../phase_triggers.c 
+../phase_triggers.c \
+../spi_reference.c \
+../tuning_targets.c 
 
 GEN_FILES += \
 ./syscfg/board.c \
@@ -39,12 +42,15 @@ GEN_MISC_DIRS += \
 C_DEPS += \
 ./F2837xD_GlobalVariableDefs.d \
 ./comparator_dac.d \
+./encoder.d \
 ./epwm_interrupts.d \
 ./hrpwm_control.d \
 ./syscfg/board.d \
 ./syscfg/c2000ware_libraries.d \
 ./main.d \
-./phase_triggers.d 
+./phase_triggers.d \
+./spi_reference.d \
+./tuning_targets.d 
 
 GEN_OPTS += \
 ./syscfg/board.opt \
@@ -54,12 +60,15 @@ OBJS += \
 ./F2837xD_GlobalVariableDefs.obj \
 ./cla_tasks.obj \
 ./comparator_dac.obj \
+./encoder.obj \
 ./epwm_interrupts.obj \
 ./hrpwm_control.obj \
 ./syscfg/board.obj \
 ./syscfg/c2000ware_libraries.obj \
 ./main.obj \
-./phase_triggers.obj 
+./phase_triggers.obj \
+./spi_reference.obj \
+./tuning_targets.obj 
 
 GEN_MISC_FILES += \
 ./syscfg/board.h \
@@ -78,12 +87,15 @@ OBJS__QUOTED += \
 "F2837xD_GlobalVariableDefs.obj" \
 "cla_tasks.obj" \
 "comparator_dac.obj" \
+"encoder.obj" \
 "epwm_interrupts.obj" \
 "hrpwm_control.obj" \
 "syscfg\board.obj" \
 "syscfg\c2000ware_libraries.obj" \
 "main.obj" \
-"phase_triggers.obj" 
+"phase_triggers.obj" \
+"spi_reference.obj" \
+"tuning_targets.obj" 
 
 GEN_MISC_FILES__QUOTED += \
 "syscfg\board.h" \
@@ -98,12 +110,15 @@ GEN_MISC_FILES__QUOTED += \
 C_DEPS__QUOTED += \
 "F2837xD_GlobalVariableDefs.d" \
 "comparator_dac.d" \
+"encoder.d" \
 "epwm_interrupts.d" \
 "hrpwm_control.d" \
 "syscfg\board.d" \
 "syscfg\c2000ware_libraries.d" \
 "main.d" \
-"phase_triggers.d" 
+"phase_triggers.d" \
+"spi_reference.d" \
+"tuning_targets.d" 
 
 GEN_FILES__QUOTED += \
 "syscfg\board.c" \
@@ -117,12 +132,15 @@ CLA_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../F2837xD_GlobalVariableDefs.c" \
 "../comparator_dac.c" \
+"../encoder.c" \
 "../epwm_interrupts.c" \
 "../hrpwm_control.c" \
 "./syscfg/board.c" \
 "./syscfg/c2000ware_libraries.c" \
 "../main.c" \
-"../phase_triggers.c" 
+"../phase_triggers.c" \
+"../spi_reference.c" \
+"../tuning_targets.c" 
 
 SYSCFG_SRCS__QUOTED += \
 "../logturtle.syscfg" 
